@@ -1,1 +1,6 @@
+# csv files have to be put into the input folder manually, too big for github
 input/*.csv
+
+# Python compiled files
+*.pyc
+__pycache__/
