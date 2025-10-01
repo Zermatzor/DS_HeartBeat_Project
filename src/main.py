@@ -1,25 +1,42 @@
-import os
+# code/main.py
 from load_data import load_csv_data
+from plot import heatmap
 
-# Path to input folder is already defined in datasets.py
-# We'll just load one file at a time, e.g., train
+def load_preview_data(nRows=1000):
+    """
+    Load preview of training and test data.
+    
+    Returns:
+    - X_train, y_train, X_test, y_test
+    """
+    # Load training data
+    train_data = load_csv_data(files_to_load=["train"], nRows=nRows)
+    X_train, y_train = train_data["train"]
+    print("Loaded training data")
+    print("Shape X_train:", X_train.shape)
+    print("Shape y_train:", y_train.shape)
 
-# Load the training data (first 1000 rows as preview)
-data = load_csv_data(files_to_load=["train"], nRows=1000)
+    # Load test data
+    test_data = load_csv_data(files_to_load=["test"], nRows=nRows)
+    X_test, y_test = test_data["test"]
+    print("Loaded test data")
+    print("Shape X_test:", X_test.shape)
+    print("Shape y_test:", y_test.shape)
 
-# Access the loaded data
-X_train, y_train = data["train"]
+    return X_train, y_train, X_test, y_test
 
-print("Loaded training data")
-print("Shape X_train:", X_train.shape)
-print("Shape y_train:", y_train.shape)
 
-# Similarly, load test data
-data_test = load_csv_data(files_to_load=["test"], nRows=1000)
-X_test, y_test = data_test["test"]
+if __name__ == "__main__":
+    # Load preview data
+    #X_train, y_train, X_test, y_test = load_preview_data(nRows=1000)
 
-print("Loaded test data")
-print("Shape X_test:", X_test.shape)
-print("Shape y_test:", y_test.shape)
+    
+    # Plot
+    # Single class
+    heatmap("normal", nRows=500)
+
+    # Multiple classes
+    heatmap(["normal","abnormal"], nRows=500)
+
 
 
