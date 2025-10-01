@@ -33,7 +33,7 @@ if __name__ == "__main__":
     
     # Plot
     # Single class
-    heatmap("normal", nRows=500)
+    heatmap("test", nRows=500)
 
     # Multiple classes
     heatmap(["normal","abnormal"], nRows=500)
