@@ -1,5 +1,5 @@
 import pandas as pd
-from utility.datasets import FULL_PATHS
+from Data.datasets import FULL_PATHS
 
 def load_csv_data(
     files_to_load=None,

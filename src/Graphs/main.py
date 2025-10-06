@@ -1,6 +1,6 @@
 # code/main.py
-from load_data import load_csv_data
-import plot
+from Data.load_data import load_csv_data
+import Graphs.plot as plot
 import pandas as pd
 
 def load_preview_data(nRows=1000):
