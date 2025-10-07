@@ -1,0 +1,54 @@
+from tkinter import *
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+from Data.load_data import load_csv_data
+from Graphs import heatmaps, random_heartbeats
+
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+
+
+# The main tkinter window
+window = Tk()
+
+window.title('Plotting in Tkinter')
+window.geometry("500x500")
+
+plot_button = Button(master = window,
+                     command = heatmaps.heatmap_for_classes,
+                     height = 2,
+                     width = 50,
+                    text = "Heatmap for classes")
+
+plot2_button = Button(master = window,
+                     command = heatmaps.heatmap_train,
+                     height = 2,
+                     width = 50,
+                    text = "Heatmap Train")
+
+plot3_button = Button(master = window,
+                     command = heatmaps.heatmap_test,
+                     height = 2,
+                     width = 50,
+                    text = "Heatmap Test")
+
+plot4_button = Button(master = window,
+                     command = heatmaps.heatmap_test,
+                     height = 2,
+                     width = 50,
+                    text = "Heatmap Test")
+
+plot4_button = Button(master = window,
+                     command = random_heartbeats.show_plot,
+                     height = 2,
+                     width = 50,
+                    text = "Plots")
+
+plot_button.pack()
+plot2_button.pack()
+plot3_button.pack()
+plot4_button.pack()
+
+window.mainloop()

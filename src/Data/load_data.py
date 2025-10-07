@@ -3,7 +3,7 @@ from Data.datasets import FULL_PATHS
 
 def load_csv_data(
     files_to_load=None,
-    nRows=1000,
+    nRows=None,
     chunksize=None
 ):
     """
@@ -12,7 +12,7 @@ def load_csv_data(
     Parameters:
     - files_to_load: list of str, keys of FULL_PATHS to load ('train', 'test', 'abnormal', 'normal')
                      If None, load all files.
-    - nRows: int or None, number of rows to read from each CSV (default 1000)
+    - nRows: int or None, number of rows to read from each CSV (default None)
     - chunksize: int or None, optional chunk size for reading large files
     
     Returns:
@@ -43,3 +43,19 @@ def load_csv_data(
             print(f"Loaded {key}: rows={X.shape[0]}, columns={X.shape[1]}")
     
     return data_dict
+
+
+def load_dataframe(key, nRows=None):
+    """
+    Load selected dataset by key from inputfolder.
+    
+    Parameters:
+    - key: str of key from FULL_PATHS to load ('train', 'test', 'abnormal', 'normal')
+    - nRows: int or None, number of rows to read from each CSV (default None)
+    
+    Returns:
+    - Dataframe of selected key
+    """
+    csv_path = FULL_PATHS[key]
+    df = pd.read_csv(csv_path, delimiter=",", nrows=nRows)
+    return df
