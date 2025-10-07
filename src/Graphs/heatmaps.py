@@ -4,29 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def load_preview_data(nRows=1000):
-    """
-    Load preview of training and test data.
-    
-    Returns:
-    - X_train, y_train, X_test, y_test
-    """
-    # Load training data
-    train_data = load_csv_data(files_to_load=["train"], nRows=nRows)
-    X_train, y_train = train_data["train"]
-    print("Loaded training data")
-    print("Shape X_train:", X_train.shape)
-    print("Shape y_train:", y_train.shape)
-
-    # Load test data
-    test_data = load_csv_data(files_to_load=["test"], nRows=nRows)
-    X_test, y_test = test_data["test"]
-    print("Loaded test data")
-    print("Shape X_test:", X_test.shape)
-    print("Shape y_test:", y_test.shape)
-
-    return X_train, y_train, X_test, y_test
-
 def heatmap_for_classes():
     X_train, y_train = load_csv_data(["train"], nRows=None)["train"]
 
