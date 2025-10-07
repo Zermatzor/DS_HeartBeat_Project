@@ -35,12 +35,6 @@ plot3_button = Button(master = window,
                     text = "Heatmap Test")
 
 plot4_button = Button(master = window,
-                     command = heatmaps.heatmap_test,
-                     height = 2,
-                     width = 50,
-                    text = "Heatmap Test")
-
-plot4_button = Button(master = window,
                      command = random_heartbeats.show_plot,
                      height = 2,
                      width = 50,
