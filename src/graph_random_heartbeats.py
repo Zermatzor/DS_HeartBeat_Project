@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import random
-from Data.load_data import load_dataframe
+from data_load_data import load_dataframe
 
 
 
