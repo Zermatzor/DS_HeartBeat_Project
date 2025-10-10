@@ -1,5 +1,5 @@
 # code/main.py
-from Data.load_data import load_csv_data
+from data_load_data import load_csv_data
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns

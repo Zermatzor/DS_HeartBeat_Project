@@ -4,3 +4,4 @@ input/*.csv
 # Python compiled files
 *.pyc
 __pycache__/
+.ipynb_checkpoints
