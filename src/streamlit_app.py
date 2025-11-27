@@ -245,3 +245,19 @@ if page == pages[3]:
 
 if page == pages[4]:
     st.write('### Conclusion')
+
+    st.markdown('''
+        In this DS Heartbeat Project, we developed, evaluated, and compared multiple models for the binary classification of heartbeats from ECG data, aiming to distinguish between normal and abnormal classes using the MIT-BIH and PTBDB datasets.
+        Key takeaways include:
+            ''')
+    
+    st.markdown("- The KNeighborsClassifier combined with Cluster Centroids resampling consistently demonstrated strong performance, achieving excellent accuracy and balanced precision-recall metrics without clear signs of overfitting. This combination is a robust choice for this task.")
+    st.markdown("- However, the KNN model paired with SMOTE resampling also showed very competitive, and in some metrics even slightly better results—particularly in detecting the minority abnormal class—highlighting that interpretation of “best” performance can vary depending on which metric or trade-off is prioritized.")
+    st.markdown("- The Multi-Layer Perceptron (MLP) models delivered impressive accuracy and F1 scores, in some cases surpassing traditional machine learning models. While potential overfitting was indicated by discrepancies between training and validation accuracy, their performance suggests that deep learning approaches are promising for ECG classification.")
+    st.markdown("- Simpler models like Logistic Regression, despite hyperparameter tuning, were not sufficient to capture the complex patterns in the ECG data.")
+    st.markdown("- Random Forest models performed well but tended to overfit, requiring further regularization or tuning.")
+    st.markdown("- Overall, resampling methods such as Cluster Centroids and SMOTE proved essential to address class imbalance and improve minority class detection.")
+    st.markdown('''
+    In conclusion, while the KNN + Cluster Centroids combination provides a stable and interpretable model with strong generalization, the results for KNN + SMOTE and MLPs highlight alternative promising approaches, depending on specifi	c performance priorities. Future work should explore advanced regularization, incorporate more diverse datasets, and expand on deep learning architectures and transfer learning techniques to further improve classification performance and clinical applicability.
+This project demonstrates the potential of data-driven methods to enhance automated ECG analysis and contribute meaningfully to cardiovascular diagnostics.
+            ''')
