@@ -1,0 +1,12 @@
+Dense layers,Activation function,Dropout layers,Output activation function,Accuracy test,Accuracy training,F1 Score (Class 0),F1 Score (Class 1),Comments
+"[512, 256, 128, 64, 36]",relu,Dropout(0.4) after each layer,sigmoid,0.96,0.97,0.98,0.9,
+"[512, 256, 128, 64, 36]",relu,None,sigmoid,0.97,0.98,0.98,0.92,"Graphs of val_acc and train_acc separate, potential overfitting; {1}"
+"[512, 256, 128]",relu,Dropout(0.4) after each layer,sigmoid,0.97,0.97,0.98,0.9,{3}
+"[512, 256, 128]",relu,None,sigmoid,0.97,0.99,0.98,0.93,"Graphs of val_acc and train_acc separate, potential overfitting;
+Very high accuracy score on training set {2}"
+"[512, 256, 128]",relu,Dropout(0.4) after each layer,softmax,0.96,0.97,0.98,0.9,softmax makes no improvement on sigmoid
+"[128, 64, 32]",relu,Dropout(0.4) after each layer,sigmoid,0.95,0.95,0.97,0.84,
+"[128, 64, 32]",relu,None,sigmoid,0.97,0.98,0.98,0.92,"Graphs of val_acc and train_acc separate, potential overfitting;"
+"[512, 256, 128, 64, 36]",tanh,Dropout(0.4) after each layer,sigmoid,0.94,0.94,0.96,0.83,No improvement on relu
+"[512, 256, 128]",tanh,Dropout(0.4) after each layer,sigmoid,0.96,0.96,0.98,0.88,"Reduced overfitting compared to relu, but worse accuracy"
+"[128, 64, 32]",tanh,Dropout(0.4) after each layer,sigmoid,0.94,0.94,0.96,0.81,No improvement on relu

@@ -16,6 +16,7 @@ from imblearn.over_sampling import SMOTE
 from imblearn.ensemble import EasyEnsembleClassifier
 from imblearn.metrics import classification_report_imbalanced
 from imblearn.under_sampling import ClusterCentroids
+from tensorflow.keras.models import load_model
 
 
 mitbih_test = pd.read_csv('input/mitbih_test.csv')
@@ -47,20 +48,22 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 #load models
 
-knn = joblib.load('best_knn_cc')
+knn = joblib.load('src/saved_models/best_knn_cc')
+mlp = load_model('src/saved_models/best_mlp.keras')
+history = joblib.load('src/saved_models/best_mlp_history.joblib')
 
 #streamlit code
 
 st.title("ECG Heartbeat Categorization")
 st.sidebar.title("Table of contents")
-pages=["The ECG Heartbeat Categorization Problem", "Data Analysis and Visualisation", "Modelling", "Model Analysis", "Conclusion"]
+pages=["The ECG Heartbeat Categorization Problem", "Data Analysis and Visualisation", "Modelling and Analysis", "Conclusion"]
 page=st.sidebar.radio("Go to", pages)
 
 if page == pages[0]:
     st.write('### Context')
 
 if page == pages[1]:
-    st.write('### Data Analysis and Visualization')
+    st.title('Data Analysis and Visualization')
 
     st.markdown('''
                 The following datasets have been provided with the Project-data:
@@ -73,7 +76,7 @@ if page == pages[1]:
                 The columns in all datasets have been renamed 0 through 187 for ease of analysis.
                 ''')
     
-    st.write('#### MIT-BIH')
+    st.subheader('MIT-BIH')
 
     with st.expander("mitbih_train"):
         st.dataframe(mitbih_train.head())
@@ -123,14 +126,14 @@ Since the unknown heartbeat could also be a normal heartbeat we will omit this v
     five_graphs_mitbih()
     
 
-    st.write('#### PTB')
+    st.subheader('PTB')
     with st.expander("ptbdb_abnormal"):
         st.dataframe(ptbdb_abnormal.head())
     with st.expander("ptbdb_normal"):
         st.dataframe(ptbdb_normal.head())
 
     st.markdown('''
-                As with mitbih, the ptb datasets are made up of 188 coolumns with the final column representing the heartbeat classification category, and the preceding columns representing
+                As with mitbih, the ptb datasets are made up of 188 columns with the final column representing the heartbeat classification category, and the preceding columns representing
                 a sample of the heartbeat taken at a sampling frequency of 125Hz, i.e. a sampling rate of every 8 milliseconds.  
 
                 We see that ptbdb_abnormal takes value 1 in the final column, whereas ptbdb_normal takes value 0. This aligns with the mitbih dataset, insofar as 0 represents the normal 
@@ -176,7 +179,7 @@ Since the unknown heartbeat could also be a normal heartbeat we will omit this v
 
     five_graphs_ptb()
 
-    st.write('#### Combined Datasets')
+    st.subheader('Combined Datasets')
 
     st.markdown('''
                 We now consider the datasets as a whole.   
@@ -222,29 +225,128 @@ Since the unknown heartbeat could also be a normal heartbeat we will omit this v
     st.write('From this we can conclude that a combined dataset provides a slightly more even distribution of the target variable, which is desirable when we come to apply a machine learning model.')
 
 if page == pages[2]:
-    st.write('### Modelling')
 
-    def scores(clf, choice):
-        if choice == 'Accuracy':
-            return clf.score(X_test, y_test)
-        elif choice == 'Confusion matrix':
-            return confusion_matrix(y_test, clf.predict(X_test))
+    st.title('Modelling and Analysis')
+
+    st.subheader('Machine Learning Model Comparison')
+
+    st.markdown('''
+                Using the preprocessed data defined before, four initial models were tested:  
+                Linear Regression, K-Nearest-Neighbours, Random Forest Classifier, and Decision Tree.  
+                  
+                These models were evaluated with default parameters.  
+
+                Given the imbalance in the data, the models were then evaluated on a resampled dataset using the following resampling methods:  
+                Random Oversampling, Random Undersampling, SMOTE, Cluster Centroids.  
+                  
+                The results are presented in the table below, with each model evaluated on training set accuracy, test set accuracy, normal category F1 score, and abnormal category F1 score.
+                ''')
     
-    choice = ['KNN with Cluster Centroids']
+    ml_model_comparison = pd.read_csv('src/streamlit_tables/ML_model_comparison.csv').drop(columns='Comments')
+
+    with st.expander('Machine Learning Model Comparison'):
+        st.dataframe(ml_model_comparison)
+    
+    st.write('We conclude that the best performing machine learning model is the KNN with cluster centroids resampling, with a test set accuract of 0.95 and no apparent overfitting')
+
+    st.markdown('''
+                A note on cross validation:  
+                A five fold cross validation was performed using GridSearchCV on Logistic Regression, KNN, and Random Forest Classifier. We concluded that optimisation of the hyperparameters
+                does not improve test set accuracy whilst avoiding overfitting, thus the choice of default parameters is justified.
+                ''')
+
+    st.subheader('MLP Model Comparison')
+
+    st.markdown('''
+                We next built and trained a series of Multi-Layer Perceptron models, varying the number of dense layers, the number of neurons in these layers, the introduction 
+                of dropout layers, and the activation function of the dense layers.  
+
+                The sigmoid output activation function was used as it is optimal for binary classification problems. The models were trained over 50 epochs, with an early stopping callback
+                based on validation loss.
+
+                As before the results are presented in the table below, with the same evaluation metrics. 
+                ''')
+    
+    mlp_model_comparison = pd.read_csv('src/streamlit_tables/mlp_model_comparison.csv').drop(columns='Comments')
+
+    with st.expander('MLP Model Comparison'):
+        st.dataframe(mlp_model_comparison)
+
+    st.markdown('''
+                We conclude that the best model had dense layers [512, 256, 128], relu activation, Dropout(0.4) after each layer, and sigmoid output activation.  
+                With a test set accuracy of 0.97, it is our best performer and with a training set accuracy of 0.97 appears to avoid overfitting.  
+
+                Whilst all the models achieved good test set accuracy, many had a higher training set accuracy indicating overfitting. This is also seen in the diverging accuracy graphs.
+                ''')
+
+
+    st.subheader('Summary of Best Models')
+
+    st.write('We conclude this section with a summary of our best machine learning model and our best deep learning model.')
+    
+    models = {'KNN with Cluster Centroids': knn, 'MLP': mlp}
+    choice = ['KNN with Cluster Centroids', 'MLP']
     option = st.selectbox('Choice of the model', choice)
     st.write('The chosen model is :', option)
+    clf = models[option]
 
-    display = st.radio('What do you want to show ?', ('Accuracy', 'Confusion matrix'))
-    if display == 'Accuracy':
-        st.write(scores(knn, display))
-    elif display == 'Confusion matrix':
-        st.dataframe(scores(knn, display))
+    if option == 'KNN with Cluster Centroids':
+
+        display = st.radio('What do you want to show ?', ('Test Set Accuracy', 'Training Set Accuracy', 'Confusion matrix'))
+
+        if display == 'Test Set Accuracy':
+            st.write(clf.score(X_test, y_test))
+        elif display == 'Training Set Accuracy':
+            st.write(clf.score(X_train, y_train))
+        elif display == 'Confusion matrix':
+            y_pred = clf.predict(X_test)
+            cm = confusion_matrix(y_test, y_pred)
+            fig, ax = plt.subplots()
+            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax, cbar=False)
+            ax.set_xlabel('Predicted')
+            ax.set_ylabel('True')
+            ax.set_title('Confusion Matrix')
+            ax.invert_yaxis()
+            st.pyplot(fig)
+
+    if option == 'MLP':
+
+        display = st.radio('What do you want to show ?', ('Test Set Accuracy', 'Training Set Accuracy', 'Confusion matrix', 'Accuracy and Loss Graphs'))
+
+        if display == 'Test Set Accuracy':
+            st.write(clf.evaluate(X_test, y_test)[1])
+        elif display == 'Training Set Accuracy':
+            st.write(clf.evaluate(X_train, y_train)[1])
+        elif display == 'Confusion matrix':
+            y_pred_probs = mlp.predict(X_test)
+            y_pred_classes = (y_pred_probs > 0.5).astype(int).flatten()
+            cm = confusion_matrix(y_test, y_pred_classes)
+            fig, ax = plt.subplots()
+            sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax, cbar=False)
+            ax.set_xlabel("Predicted")
+            ax.set_ylabel("True")
+            ax.set_title("Confusion Matrix")
+            ax.invert_yaxis()
+            st.pyplot(fig)
+        elif display == 'Accuracy and Loss Graphs':
+            fig_acc, ax_acc = plt.subplots()
+            ax_acc.plot(history['accuracy'], label='Train Acc')
+            ax_acc.plot(history['val_accuracy'], label='Val Acc')
+            ax_acc.set_xlabel('Epoch')
+            ax_acc.set_ylabel('Accuracy')
+            ax_acc.legend()
+            st.pyplot(fig_acc)  
+
+            fig_loss, ax_loss = plt.subplots()
+            ax_loss.plot(history['loss'], label='Train Loss')
+            ax_loss.plot(history['val_loss'], label='Val Loss')
+            ax_loss.set_xlabel('Epoch')
+            ax_loss.set_ylabel('Loss')
+            ax_loss.legend()
+            st.pyplot(fig_loss)  
 
 if page == pages[3]:
-    st.write('### Model Analysis')
-
-if page == pages[4]:
-    st.write('### Conclusion')
+    st.title('Conclusion')
 
     st.markdown('''
         In this DS Heartbeat Project, we developed, evaluated, and compared multiple models for the binary classification of heartbeats from ECG data, aiming to distinguish between normal and abnormal classes using the MIT-BIH and PTBDB datasets.
