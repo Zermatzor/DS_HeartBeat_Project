@@ -60,7 +60,90 @@ pages=["The ECG Heartbeat Categorization Problem", "Data Analysis and Visualisat
 page=st.sidebar.radio("Go to", pages)
 
 if page == pages[0]:
-    st.write('### Context')
+    st.title("Project Context")
+
+    st.markdown("""
+    ## DS Heartbeat Project  
+    **Cohort:** Aug25_bootcamp_ds  
+    **Project-group:** Aug25_bds_int_heartbeat-classification2  
+
+    **Team:**  
+    - Max Jaworski  
+    - Marian Held  
+    - Mathias Michalczak  
+
+    **Project-mentor:** Romain Lesieur  
+    **Cohort-leader:** Vincent Lalanne  
+
+    ---
+
+    ## Introduction  
+    The ECG (electrocardiogram) signals used in this project represent heartbeats from healthy individuals as well as patients with arrhythmias or myocardial infarction.  
+    The goal of this project is to develop machine learning and deep learning models capable of reliably classifying ECG heartbeats into *normal* or *abnormal*.  
+    As an extension, transfer learning approaches may also be explored.
+
+    ---
+
+    ## Collaboration  
+    To achieve the project objectives, our team collaborates using:  
+    - **Discord** - communication & organization  
+    - **Slack** - interaction with mentor & cohort leader  
+    - **GitHub** - code collaboration  
+    - **Google Docs** - documentation  
+    - **VS Code** - development environment  
+    - **Jupyter Notebooks** - experimentation & exploration  
+
+    We meet weekly with our mentor to review progress and receive new tasks.  
+    After each meeting, the team organizes upcoming work internally.
+
+    ---
+
+    ## Project Resources  
+    The following resources form the foundation of this project:
+
+    - Project introduction: *HeartBeat Classification*  
+      https://docs.google.com/document/d/1_b2-aJlB3uEyGijxt5ncGcsxwybNNJA6wrOIJOYfj-o/edit?tab=t.0
+    - Project expectations: *Projects_methodology_report* & *Projet_Soutenance_Méthodologie_DS_EN*       
+    - Dataset source (Kaggle):  
+      https://www.kaggle.com/datasets/shayanfazeli/heartbeat/data
+
+    ---
+
+    ## Datasets Overview  
+    Two datasets were provided:
+
+    - **MIT-BIH Arrhythmia Dataset:**  
+      `mitbih_train`, `mitbih_test`
+
+    - **PTB Diagnostic ECG Database:**  
+      `ptbdb_normal`, `ptbdb_abnormal`
+
+    Both datasets contain 188 columns:  
+    - 187 time-series samples of an ECG heartbeat  
+    - 1 label column representing a heartbeat class  
+
+    The MIT-BIH dataset contains 5 classes, which we recoded into a binary target  
+    (normal vs. abnormal).  
+    The PTBDB dataset already uses binary labels (0 = normal, 1 = abnormal).  
+
+    Combining both datasets results in a richer and more balanced foundation for modeling.
+
+    ---
+
+    ## Project Workflow  
+    The analysis and model-building process includes:
+
+    1. Data exploration & visualization  
+    2. Dataset harmonization & class recoding  
+    3. Resampling strategies to address class imbalance  
+    4. Baseline ML models (Logistic Regression, KNN, Random Forest, Decision Tree)  
+    5. Deep-learning models (MLP)  
+    6. Cross-validation and hyperparameter tuning  
+    7. Final model selection and interpretation  
+
+    This context page summarizes the documentation and project's methodological background.
+    """)
+
 
 if page == pages[1]:
     st.title('Data Analysis and Visualization')
