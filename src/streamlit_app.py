@@ -73,7 +73,6 @@ if page == pages[0]:
     - Mathias Michalczak  
 
     **Project-mentor:** Romain Lesieur  
-    **Cohort-leader:** Vincent Lalanne  
 
     ---
 
