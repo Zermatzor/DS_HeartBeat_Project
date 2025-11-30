@@ -372,17 +372,79 @@ if page == pages[2]:
     st.write('The chosen model is :', option)
     clf = models[option]
 
+    if 'knn_results' not in st.session_state:
+        st.session_state.knn_results = {
+            'test_set_accuracy': None,
+            'training_set_accuracy': None,
+            'confusion_matrix': None,
+        }
+
+    def get_knn_result(_display):
+        knn_results = st.session_state.knn_results  # shorthand
+
+        # st.write('using knn method with:', _display)
+        # st.write('current result:', knn_results[_display])
+
+        # 2. If already computed, just return cached value
+        if knn_results[_display] is not None:
+            return knn_results[_display]
+
+        # 3. Otherwise, compute once and store
+        if _display == 'test_set_accuracy':
+            knn_results[_display] = clf.score(X_test, y_test)
+
+        elif _display == 'training_set_accuracy':
+            knn_results[_display] = clf.score(X_train, y_train)
+
+        elif _display == 'confusion_matrix':
+            y_pred = clf.predict(X_test)
+            knn_results[_display] = confusion_matrix(y_test, y_pred)
+
+        return knn_results[_display]
+    
+    if 'mlp_results' not in st.session_state:
+        st.session_state.mlp_results = {
+            'test_set_accuracy': None,
+            'training_set_accuracy': None,
+            'confusion_matrix': None,
+            'accuracy_and_loss': None
+        }
+
+    def get_mlp_result(_display):
+        mlp_results = st.session_state.knn_results  # shorthand
+
+        # st.write('using mlp method with:', _display)
+        # st.write('current result:', mlp_results[_display])
+
+        # 2. If already computed, just return cached value
+        if mlp_results[_display] is not None:
+            return mlp_results[_display]
+
+        # 3. Otherwise, compute once and store
+        if _display == 'test_set_accuracy':
+            mlp_results[_display] = clf.evaluate(X_test, y_test)[1]
+
+        elif _display == 'training_set_accuracy':
+            mlp_results[_display] = clf.evaluate(X_train, y_train)[1]
+
+        elif _display == 'confusion_matrix':
+            y_pred_probs = mlp.predict(X_test)
+            y_pred_classes = (y_pred_probs > 0.5).astype(int).flatten()
+            mlp_results[_display] = confusion_matrix(y_test, y_pred_classes)
+
+        return mlp_results[_display]
+
+
     if option == 'KNN with Cluster Centroids':
 
         display = st.radio('What do you want to show ?', ('Test Set Accuracy', 'Training Set Accuracy', 'Confusion matrix'))
 
         if display == 'Test Set Accuracy':
-            st.write(clf.score(X_test, y_test))
+            st.write(get_knn_result('test_set_accuracy'))
         elif display == 'Training Set Accuracy':
-            st.write(clf.score(X_train, y_train))
+            st.write(get_knn_result('training_set_accuracy'))
         elif display == 'Confusion matrix':
-            y_pred = clf.predict(X_test)
-            cm = confusion_matrix(y_test, y_pred)
+            cm = get_knn_result('confusion_matrix')
             fig, ax = plt.subplots()
             sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax, cbar=False)
             ax.set_xlabel('Predicted')
@@ -396,13 +458,11 @@ if page == pages[2]:
         display = st.radio('What do you want to show ?', ('Test Set Accuracy', 'Training Set Accuracy', 'Confusion matrix', 'Accuracy and Loss Graphs'))
 
         if display == 'Test Set Accuracy':
-            st.write(clf.evaluate(X_test, y_test)[1])
+            st.write(get_mlp_result('test_set_accuracy'))
         elif display == 'Training Set Accuracy':
-            st.write(clf.evaluate(X_train, y_train)[1])
+            st.write(get_mlp_result('training_set_accuracy'))
         elif display == 'Confusion matrix':
-            y_pred_probs = mlp.predict(X_test)
-            y_pred_classes = (y_pred_probs > 0.5).astype(int).flatten()
-            cm = confusion_matrix(y_test, y_pred_classes)
+            cm = get_mlp_result('confusion_matrix')
             fig, ax = plt.subplots()
             sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax, cbar=False)
             ax.set_xlabel("Predicted")
