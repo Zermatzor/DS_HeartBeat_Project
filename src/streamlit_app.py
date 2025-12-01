@@ -18,12 +18,6 @@ from imblearn.metrics import classification_report_imbalanced
 from imblearn.under_sampling import ClusterCentroids
 from tensorflow.keras.models import load_model
 
-
-# mitbih_test = pd.read_csv('input/mitbih_test.csv')
-# mitbih_train = pd.read_csv('input/mitbih_train.csv')
-# ptbdb_abnormal = pd.read_csv('input/ptbdb_abnormal.csv')
-# ptbdb_normal = pd.read_csv('input/ptbdb_normal.csv')
-
 # Use Streamlit caching so files are downloaded only once per session
 @st.cache_data
 def load_csv(url: str) -> pd.DataFrame:
