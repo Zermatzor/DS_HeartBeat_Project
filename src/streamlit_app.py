@@ -425,7 +425,7 @@ if page == pages[2]:
         }
 
     def get_mlp_result(_display):
-        mlp_results = st.session_state.knn_results  # shorthand
+        mlp_results = st.session_state.mlp_results # shorthand
 
         # st.write('using mlp method with:', _display)
         # st.write('current result:', mlp_results[_display])
