@@ -1,0 +1,24 @@
+Model,Resampling / Method,Train Accuracy,Test Accuracy,F1 Normal,F1 Abnormal,Comments
+Logistic Regression,None,0.728,0.84,0.91,0.36,"Underfitting, weak detection of abnormal class"
+KNN,None,1,0.9687,0.98,0.91,Perfect training accuracy indicates overfitting
+Random Forest,None,1,0.9604,0.98,0.89,Perfect training accuracy indicates overfitting
+Decision Tree,None,1,0.9265,0.95,0.8,"Significant overfitting, unstable performance"
+Logistic Regression,Random Oversampling,0.728,0.727,0.81,0.48,"No improvement, slightly worse performance"
+KNN,"Random
+Oversampling",1,0.9687,0.98,0.91,No improvement
+Random Forest,"Random
+Oversampling",1,0.97,0.98,0.91,No improvement
+Logistic Regression,Random Undersampling,0.725,0.725,0.81,0.47,"Loss of information, lower accuracy"
+KNN,"Random
+Undersampling",1,0.9439,0.96,0.86,No improvement
+"Random
+Forest","Random
+Undersampling",1,0.95,0.97,0.87,No improvement
+Logistic Regression,SMOTE,0.715,0.725,0.81,0.48,"No gain, model remains too linear"
+KNN,SMOTE,0.987,0.9569,0.97,0.89,"Good balance, reduced overfitting"
+"Random 
+Forest",SMOTE,1,0.974,0.98,0.93,Perfect training accuracy indicates overfitting
+Logistic Regression,Cluster Centroids,0.669,0.683,0.78,0.43,"Poor overall, weak performance on abnormal class"
+KNN,Cluster Centroids,0.938,0.954,0.97,0.88,"Top performer: high precision and recall, well balanced"
+Random Forest,Cluster Centroids,1,0.703,0.78,0.54,"Overfitting: perfect train accuracy, poor test results"
+Easy Ensemble Classifier,Boosted Under-Sampling Ensembles,0.7665,0.7616,0.84,0.51,"Improved recall for abnormal, lower overall accuracy"
