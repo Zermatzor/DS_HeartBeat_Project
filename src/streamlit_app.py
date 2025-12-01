@@ -18,25 +18,10 @@ from imblearn.metrics import classification_report_imbalanced
 from imblearn.under_sampling import ClusterCentroids
 from tensorflow.keras.models import load_model
 
-# Use Streamlit caching so files are downloaded only once per session
-@st.cache_data
-def load_hugface_csv(url: str) -> pd.DataFrame:
-    return pd.read_csv(url)
-
-# ---- URLs from your Hugging Face dataset ----
-MITBIH_TEST_URL = "https://huggingface.co/datasets/Zermatzor/heartbeat_data/resolve/main/mitbih_test.csv"
-MITBIH_TRAIN_URL = "https://huggingface.co/datasets/Zermatzor/heartbeat_data/resolve/main/mitbih_train.csv"
-PTBDB_ABNORMAL_URL = "https://huggingface.co/datasets/Zermatzor/heartbeat_data/resolve/main/ptbdb_abnormal.csv"
-PTBDB_NORMAL_URL = "https://huggingface.co/datasets/Zermatzor/heartbeat_data/resolve/main/ptbdb_normal.csv"
-
-# ---- Load all datasets ----
-mitbih_test = load_hugface_csv(MITBIH_TEST_URL)
-mitbih_train = load_hugface_csv(MITBIH_TRAIN_URL)
-ptbdb_abnormal = load_hugface_csv(PTBDB_ABNORMAL_URL)
-ptbdb_normal = load_hugface_csv(PTBDB_NORMAL_URL)
-
-# Optional: show that loading is complete
-st.success("Datasets loaded successfully from Hugging Face!")
+mitbih_test = pd.read_csv('input/mitbih_test.csv')
+mitbih_train = pd.read_csv('input/mitbih_train.csv')
+ptbdb_abnormal = pd.read_csv('input/ptbdb_abnormal.csv')
+ptbdb_normal = pd.read_csv('input/ptbdb_normal.csv')
 
 #rename columns
 
