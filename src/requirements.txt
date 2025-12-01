@@ -1,0 +1,10 @@
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+nbconvert
+keras
+tensorflow
+streamlit
+imbalanced-learn
